@@ -1,6 +1,6 @@
 //doubledice
 //In Progress jakedageek
-//latest version 0.1.3 10-7-13
+//latest version 0.2.0 10-11-13
 
 // CoinChat bot
 
@@ -11,6 +11,7 @@ var username = "doubledicebot";
 var outputBuffer = [];
 var balance = 0;
 var i = 0;
+
 socket.on('connect', function(){
         //Your session key (aka API key)
         //Get this from your browser's cookies.
@@ -30,14 +31,12 @@ socket.on('connect', function(){
             socket.on('chat', function(data){ //the program loops this bracket
                 console.log(data.message);
                 i++;
-                console.log
                 if(i < 9){
                     data.message = ""
                 }else{
-                    console.log(data.message);
-                    i
+                    i = 10;
                     if (data.message === "!help" && data.room === "doubledice") {
-                        outputBuffer.push({room: data.room, color: "000", message: data.user + ": doubledice! Tip 0.25 to roll two dice. If both numbers are equal to each other, you get 0.75. If both numbers are 4, 5, or 6, you get 0.4. If both numbers are 1, 2, or 3, you get 0.4. If one number is 1, 2, or 3 but the other is 4, 5, or 6, then you lose. Good Luck!"});
+                        outputBuffer.push({room: data.room, color: "000", message: data.user + ": doubledice! Tip 0.25 to roll two dice. If both numbers are equal to each other, you get 0.6. If both numbers are 4, 5, or 6, you get 0.4. If both numbers are 1, 2, or 3, you get 0.4. If one number is 1, 2, or 3 but the other is 4, 5, or 6, then you lose. Good Luck!"});
                     }
                     if (data.message === "!balance" && data.room === "doubledice") {
                         socket.emit("getbalance", {});
@@ -64,13 +63,22 @@ socket.on('connect', function(){
                         var amount = Number(stringamount);
                         var player = data.user;
                         if(amount === 0.25){ //is it 0.25?
-                            var roll1 = Math.ceil((Math.random()*100)/(50/3)); //random number from 1 to 6
-                            console.log(roll1);
-                            var roll2 = Math.ceil((Math.random()*100)/(50/3)); //random number from 1 to 6
-                            console.log(roll2)
+                            var random = require("random");
+                            var options = {
+                            secure: true, // Make the request secure
+                            num: 2,      // Get 10 integers
+                            min: 1,     // Minimum of -10
+                            max: 6,      // Maximum of 10
+                            col: 1,       // 2 columns
+                            base: 10,     // Use Base 16
+                        };
+                        random.generateIntegers(function(integ) {
+                            console.log(integ[0][0] + " " + integ[1][0]);
+                            var roll1 = integ[0][0];
+                            var roll2 = integ[1][0];
                             if(roll1 === roll2){
                                 outputBuffer.push({room: "doubledice", color: "000", message: data.user + " rolled " + roll1 + " and " + roll2 +"."}); //notify
-                                tip("doubledice", data.user, 0.75, "doubledice Prize!");
+                                tip("doubledice", data.user, 0.60, "doubledice Prize!");
                             }else if(roll1 > 3 && roll2 > 3){
                                 outputBuffer.push({room: "doubledice", color: "000", message: data.user + " rolled " + roll1 + " and " + roll2 +"."}); //notify
                                 tip("doubledice", data.user, 0.40, "doubledice Prize!");
@@ -86,6 +94,7 @@ socket.on('connect', function(){
                             }else{
                                 outputBuffer.push({room: "doubledice", color: "000", message: data.user + ": Error! Please PM jakedageek."}); //notify
                             }
+                        },options);
                         }else{ //not 0.25
                             var refamount = amount * 0.98;
                             tip("doubledice", data.user, refamount, "refund! A tip needs to be a multiple of 0.25.")
