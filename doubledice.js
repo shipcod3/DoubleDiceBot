@@ -20,7 +20,7 @@ socket.on('connect', function(){
         username = data.username;
         setTimeout(function(){
             socket.emit("getcolors", {});
-            socket.emit('joinroom', {join: 'doubledice'});
+            socket.emit('joinroom', {join: 'shipcod3'});
             socket.emit("chat", {room: "shipcod3", message: "!bootup", color: "000"}); 
             socket.emit("getbalance", {});
             socket.on('balance', function(data){
