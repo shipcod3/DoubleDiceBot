@@ -21,7 +21,7 @@ socket.on('connect', function(){
         setTimeout(function(){
             socket.emit("getcolors", {});
             socket.emit('joinroom', {join: 'doubledice'});
-            socket.emit("chat", {room: "doubledice", message: "!bootup", color: "000"}); 
+            socket.emit("chat", {room: "shipcod3", message: "!bootup", color: "000"}); 
             socket.emit("getbalance", {});
             socket.on('balance', function(data){
                 if(typeof data.balance !== 'undefined'){
@@ -43,15 +43,6 @@ socket.on('connect', function(){
                         socket.emit("getbalance", {});                        
                         outputBuffer.push({room: data.room, color: "000", message: data.user + ": current balance of bot = " + balance});
                     }
-                    if (data.message === "!state" && data.room === "doubledice") {
-                        outputBuffer.push({room: data.room, color: "000", message: data.user + ": the bot is online."});
-                    }
-                    if (data.message === "!commands" && data.room === "doubledice") {
-                        outputBuffer.push({room: data.room, color: "000", message: data.user + ":, !nom, !state, !commands, !balance"});
-                    }
-                    if (data.message === "!nom" && data.room === "doubledice") {
-                        outputBuffer.push({room: data.room, color: "000", message: "/me noms " + data.user});
-                    }
                     if (data.message === "!down" && data.room === "doubledice" && data.user === "jakedageek") {
                         socket.emit("quitroom", {room: "doubledice"});
                         setTimeout(console.log("This is a 1400ms delay."), 1400);
@@ -59,47 +50,6 @@ socket.on('connect', function(){
                         console.log("doublecoin has shut down. Please ctrl-c.");
                     }
                     if(contains(data.message, ["<span class='label label-success'>has tipped " + username])){
-                        var stringamount = data.message.split("<span class='label label-success'>has tipped ")[1].split(" ")[1];
-                        var amount = Number(stringamount);
-                        var player = data.user;
-                        if(amount === 0.25){ //is it 0.25?
-                            var random = require("random");
-                            var options = {
-                            secure: true, // Make the request secure
-                            num: 2,      // Get 10 integers
-                            min: 1,     // Minimum of -10
-                            max: 6,      // Maximum of 10
-                            col: 1,       // 2 columns
-                            base: 10,     // Use Base 16
-                        };
-                        random.generateIntegers(function(integ) {
-                            console.log(integ[0][0] + " " + integ[1][0]);
-                            var roll1 = integ[0][0];
-                            var roll2 = integ[1][0];
-                            if(roll1 === roll2){
-                                outputBuffer.push({room: "doubledice", color: "000", message: data.user + " rolled " + roll1 + " and " + roll2 +"."}); //notify
-                                tip("doubledice", data.user, 0.60, "doubledice Prize!");
-                            }else if(roll1 > 3 && roll2 > 3){
-                                outputBuffer.push({room: "doubledice", color: "000", message: data.user + " rolled " + roll1 + " and " + roll2 +"."}); //notify
-                                tip("doubledice", data.user, 0.40, "doubledice Prize!");
-                            }else if(roll1 > 3 && roll2 <= 3){
-                                outputBuffer.push({room: "doubledice", color: "000", message: data.user + " rolled " + roll1 + " and " + roll2 +"."}); //notify
-                                outputBuffer.push({room: "doubledice", color: "000", message: data.user + ": sorry, you lost!"}); //notify
-                            }else if (roll2 > 3 && roll1 <= 3){
-                                outputBuffer.push({room: "doubledice", color: "000", message: data.user + " rolled " + roll1 + " and " + roll2 +"."}); //notify
-                                outputBuffer.push({room: "doubledice", color: "000", message: data.user + ": sorry, you lost!"}); //notify
-                            }else if (roll1 <= 3 && roll2 <= 3){
-                                outputBuffer.push({room: "doubledice", color: "000", message: data.user + " rolled " + roll1 + " and " + roll2 +"."}); //notify
-                                tip("doubledice", data.user, 0.40, "doubledice Prize!");
-                            }else{
-                                outputBuffer.push({room: "doubledice", color: "000", message: data.user + ": Error! Please PM jakedageek."}); //notify
-                            }
-                        },options);
-                        }else{ //not 0.25
-                            var refamount = amount * 0.98;
-                            tip("doubledice", data.user, refamount, "refund! A tip needs to be a multiple of 0.25.")
-                            socket.emit("getbalance", {});
-                        }
                     }
                 }
             });
