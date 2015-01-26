@@ -7,7 +7,7 @@
 var io = require('socket.io-client');
 socket = io.connect("https://coinchat.org", {secure: true});
 
-var username = "nameofthebot";
+var username = "scryptz0";
 var outputBuffer = [];
 var balance = 0;
 var i = 0;
@@ -35,15 +35,15 @@ socket.on('connect', function(){
                     data.message = ""
                 }else{
                     i = 10;
-                    if (data.message === "!help" && data.room === "doubledice") {
+                    if (data.message === "!help" && data.room === "shipcod3") {
                         outputBuffer.push({room: data.room, color: "000", message: data.user + ": doubledice! Tip 0.25 to roll two dice. If both numbers are equal to each other, you get 0.6. If both numbers are 4, 5, or 6, you get 0.4. If both numbers are 1, 2, or 3, you get 0.4. If one number is 1, 2, or 3 but the other is 4, 5, or 6, then you lose. Good Luck!"});
                     }
-                    if (data.message === "!balance" && data.room === "doubledice") {
+                    if (data.message === "!balance" && data.room === "shipcod3") {
                         socket.emit("getbalance", {});
                         socket.emit("getbalance", {});                        
                         outputBuffer.push({room: data.room, color: "000", message: data.user + ": current balance of bot = " + balance});
                     }
-                    if (data.message === "!down" && data.room === "doubledice" && data.user === "shipcod3") {
+                    if (data.message === "!down" && data.room === "shipcod3" && data.user === "shipcod3") {
                         socket.emit("quitroom", {room: "doubledice"});
                         setTimeout(console.log("This is a 1400ms delay."), 1400);
                         socket.disconnect();
