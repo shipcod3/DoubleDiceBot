@@ -7,7 +7,7 @@
 var io = require('socket.io-client');
 socket = io.connect("https://coinchat.org", {secure: true});
 
-var username = "doubledicebot";
+var username = "nameofthebot";
 var outputBuffer = [];
 var balance = 0;
 var i = 0;
@@ -43,7 +43,7 @@ socket.on('connect', function(){
                         socket.emit("getbalance", {});                        
                         outputBuffer.push({room: data.room, color: "000", message: data.user + ": current balance of bot = " + balance});
                     }
-                    if (data.message === "!down" && data.room === "doubledice" && data.user === "jakedageek") {
+                    if (data.message === "!down" && data.room === "doubledice" && data.user === "shipcod3") {
                         socket.emit("quitroom", {room: "doubledice"});
                         setTimeout(console.log("This is a 1400ms delay."), 1400);
                         socket.disconnect();
